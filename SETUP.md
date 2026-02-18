@@ -2,25 +2,59 @@
 
 ## Quick Start
 
-### 1. Generate SSL Certificates
+Spotify requires HTTPS for OAuth callbacks. Since self-signed certificates don't work with Spotify's validation, we'll use **ngrok** to create a secure tunnel.
 
-Spotify requires HTTPS for OAuth callbacks. Generate self-signed certificates:
+### 1. Install ngrok
+
+Download from https://ngrok.com/download or use package manager:
 
 ```bash
-npm run generate-cert
+# Linux/Mac with Homebrew
+brew install ngrok
+
+# Or download binary directly
+curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt update && sudo apt install ngrok
 ```
 
-This creates `localhost.pem` and `localhost-key.pem` (valid for 365 days).
+Sign up for free account at https://ngrok.com and get your auth token.
 
-### 2. Configure Spotify App
+```bash
+ngrok config add-authtoken <your_token>
+```
+
+### 2. Start the Application Server
+
+```bash
+npm start
+```
+
+Server runs on http://localhost:3000
+
+### 3. Start ngrok Tunnel (in separate terminal)
+
+```bash
+ngrok http 3000
+```
+
+You'll see output like:
+```
+Forwarding   https://abcd-123-456-789.ngrok-free.app -> http://localhost:3000
+```
+
+Copy the **https** URL (e.g., `https://abcd-123-456-789.ngrok-free.app`)
+
+### 4. Configure Spotify App
 
 1. Go to https://developer.spotify.com/dashboard
 2. Create a new app or select existing app
 3. Click "Edit Settings"
-4. Add Redirect URI: `https://localhost:3000/callback`
+4. Add Redirect URI: `https://your-ngrok-url.ngrok-free.app/callback`
+   - Replace `your-ngrok-url` with your actual ngrok URL
 5. Save
 
-### 3. Configure Environment Variables
+### 5. Configure Environment Variables
 
 ```bash
 cp .env.example .env
@@ -31,37 +65,22 @@ Edit `.env` and add your credentials:
 ```env
 SPOTIFY_CLIENT_ID=<your_client_id_from_dashboard>
 SPOTIFY_CLIENT_SECRET=<your_client_secret_from_dashboard>
-SPOTIFY_REDIRECT_URI=https://localhost:3000/callback
+SPOTIFY_REDIRECT_URI=https://your-ngrok-url.ngrok-free.app/callback
 SESSION_SECRET=<generate_random_string>
 ```
+
+**Important:** Use your actual ngrok URL from step 3.
 
 **Generate SESSION_SECRET:**
 ```bash
 openssl rand -base64 32
 ```
 
-### 4. Start the Server
+### 6. Access the App
 
-```bash
-npm start
-```
+Open your ngrok URL in browser: `https://your-ngrok-url.ngrok-free.app`
 
-You should see:
-```
-Server running on https://localhost:3000
-✓ Using HTTPS with self-signed certificate
-```
-
-### 5. Access the App
-
-Open https://localhost:3000 in your browser.
-
-**Important:** Your browser will show a security warning because the certificate is self-signed. This is expected for local development.
-
-**To bypass the warning:**
-- Chrome: Click "Advanced" → "Proceed to localhost (unsafe)"
-- Firefox: Click "Advanced" → "Accept the Risk and Continue"
-- Safari: Click "Show Details" → "visit this website"
+**Note:** ngrok free tier shows an interstitial page on first visit. Click "Visit Site" to continue.
 
 ## Testing OAuth Flow
 
@@ -79,27 +98,44 @@ See the checkpoint verification scenarios in plan 01-04 for complete test instru
 
 ## Troubleshooting
 
-### Certificate Issues
-
-If you see "certificates don't exist" error:
-```bash
-npm run generate-cert
-```
-
 ### Redirect URI Mismatch
 
-Verify your `.env` file has:
+Verify your `.env` file and Spotify Dashboard have the **exact same** redirect URI:
 ```
-SPOTIFY_REDIRECT_URI=https://localhost:3000/callback
+SPOTIFY_REDIRECT_URI=https://your-ngrok-url.ngrok-free.app/callback
 ```
 
-And Spotify Dashboard has the exact same URI configured.
+### ngrok URL Changed
+
+ngrok free tier generates new URLs on restart. When this happens:
+1. Note the new ngrok URL
+2. Update `.env` with new URL
+3. Update Spotify Dashboard redirect URI
+4. Restart your app: `npm start`
 
 ### Port Already in Use
 
-Change the port in `.env`:
-```
-PORT=3001
+Change the port:
+```bash
+PORT=3001 npm start
 ```
 
-Then update Spotify Dashboard redirect URI to match: `https://localhost:3001/callback`
+Then restart ngrok:
+```bash
+ngrok http 3001
+```
+
+### Session Issues
+
+If session isn't persisting, make sure `SESSION_SECRET` is set in `.env`
+
+## Alternative: Local HTTPS (Advanced)
+
+If you need a permanent local HTTPS solution without ngrok:
+
+1. Install mkcert (creates locally-trusted certificates)
+2. Generate certificates: `mkcert localhost`
+3. Update server.js to use HTTPS with the certificates
+4. Add `https://localhost:3000/callback` to Spotify Dashboard
+
+This requires system-level certificate installation and may not work with Spotify's validation.
