@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Project foundation (Node.js, Express, dependencies) ✓ 2026-02-18
-- [ ] 01-02-PLAN.md — OAuth implementation (routes, session, CSRF protection)
+- [x] 01-02-PLAN.md — OAuth implementation (routes, session, CSRF protection) ✓ 2026-02-18
 - [ ] 01-03-PLAN.md — Frontend interface (landing page, authorization UI)
 - [ ] 01-04-PLAN.md — End-to-end verification checkpoint
 
@@ -87,11 +87,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. OAuth Foundation | 1/4 | In progress | - |
+| 1. OAuth Foundation | 2/4 | In progress | - |
 | 2. Data Pipeline | 0/TBD | Not started | - |
 | 3. Comparison Engine | 0/TBD | Not started | - |
 | 4. Visual Results | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-18*
-*Last updated: 2026-02-18 (plan 01-01 completed)*
+*Last updated: 2026-02-18 (plan 01-02 completed)*
