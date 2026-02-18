@@ -5,3 +5,7 @@ node_modules/
 npm-debug.log*
 .vscode/
 .idea/
+
+# SSL certificates (self-signed for local development)
+localhost.pem
+localhost-key.pem

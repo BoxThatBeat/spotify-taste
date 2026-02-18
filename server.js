@@ -3,6 +3,9 @@ require('dotenv').config();
 
 const express = require('express');
 const session = require('express-session');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 // Basic middleware
@@ -17,7 +20,7 @@ app.use(session({
   cookie: {
     maxAge: 15 * 60 * 1000, // 15 minutes (session timeout from CONTEXT.md)
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Always use secure cookies with HTTPS
     sameSite: 'lax'
   }
 }));
@@ -62,6 +65,27 @@ app.use('/', authRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
+// Check if SSL certificates exist for HTTPS
+const certPath = path.join(__dirname, 'localhost.pem');
+const keyPath = path.join(__dirname, 'localhost-key.pem');
+
+if (fs.existsSync(certPath) && fs.existsSync(keyPath)) {
+  // Start HTTPS server with certificates
+  const httpsOptions = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath)
+  };
+  
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log(`Server running on https://localhost:${PORT}`);
+    console.log('✓ Using HTTPS with self-signed certificate');
+  });
+} else {
+  // Fallback to HTTP if certificates don't exist
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log('⚠ Running HTTP - Generate HTTPS certificates for OAuth to work');
+    console.log('Run: npm run generate-cert');
+  });
+}
