@@ -57,8 +57,9 @@ router.get('/login/userB', (req, res) => {
     req.session.oauthState = state;
     req.session.currentUser = 'userB';
     
-    // Create Spotify authorization URL
-    const authorizeURL = spotifyApi.createAuthorizeURL(SCOPES, state);
+    // Create Spotify authorization URL with show_dialog=true
+    // This forces Spotify to show account picker instead of auto-login
+    const authorizeURL = spotifyApi.createAuthorizeURL(SCOPES, state, true);
     
     // Redirect user to Spotify authorization page
     res.redirect(authorizeURL);
