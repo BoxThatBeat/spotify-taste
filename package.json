@@ -1,0 +1,23 @@
+{
+  "name": "spotify-taste-match",
+  "version": "1.0.0",
+  "description": "A web app that compares two people's Spotify accounts and visualizes their shared music taste",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["spotify", "oauth", "music", "comparison"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.0.0",
+    "spotify-web-api-node": "^5.0.2",
+    "express-session": "^1.18.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
