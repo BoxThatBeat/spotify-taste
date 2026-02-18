@@ -2,11 +2,33 @@
 require('dotenv').config();
 
 const express = require('express');
+const session = require('express-session');
 const app = express();
 
 // Basic middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Session middleware (configured before routes)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'dev-secret-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 15 * 60 * 1000, // 15 minutes (session timeout from CONTEXT.md)
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  }
+}));
+
+// Initialize session token structure
+app.use((req, res, next) => {
+  if (!req.session.tokens) {
+    req.session.tokens = { userA: null, userB: null };
+  }
+  next();
+});
 
 // Health check route
 app.get('/', (req, res) => {
