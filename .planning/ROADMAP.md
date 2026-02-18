@@ -29,10 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. System stores both users' access tokens and refresh tokens server-side (never exposed to frontend)
   4. OAuth state parameter prevents CSRF attacks for both authorization flows
   5. System maintains separate token storage for User A and User B without confusion
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] (Plans created during /gsd-plan-phase 1)
+- [ ] 01-01-PLAN.md — Project foundation (Node.js, Express, dependencies)
+- [ ] 01-02-PLAN.md — OAuth implementation (routes, session, CSRF protection)
+- [ ] 01-03-PLAN.md — Frontend interface (landing page, authorization UI)
+- [ ] 01-04-PLAN.md — End-to-end verification checkpoint
 
 ### Phase 2: Data Pipeline
 **Goal**: System reliably fetches top artists and tracks for both users from Spotify API
