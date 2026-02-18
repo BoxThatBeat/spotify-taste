@@ -30,25 +30,35 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve static files from public directory
+app.use(express.static('public'));
+
+// Session status API endpoint
+app.get('/api/session-status', (req, res) => {
+  const userA = req.session.tokens?.userA ? {
+    displayName: req.session.tokens.userA.displayName,
+    spotifyId: req.session.tokens.userA.spotifyId
+  } : null;
+  
+  const userB = req.session.tokens?.userB ? {
+    displayName: req.session.tokens.userB.displayName,
+    spotifyId: req.session.tokens.userB.spotifyId
+  } : null;
+  
+  res.json({ userA, userB });
+});
+
+// Session clear endpoint (for testing/restart)
+app.post('/api/clear-session', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ error: 'Failed to clear session' });
+    res.json({ success: true });
+  });
+});
+
 // Mount OAuth routes
 const authRoutes = require('./routes/auth');
 app.use('/', authRoutes);
-
-// Health check route
-app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Spotify Taste Match</title>
-      </head>
-      <body>
-        <h1>Spotify Taste Match - Server Running</h1>
-        <p>The server is up and running successfully.</p>
-      </body>
-    </html>
-  `);
-});
 
 // Start server
 const PORT = process.env.PORT || 3000;

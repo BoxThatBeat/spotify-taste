@@ -80,13 +80,13 @@ router.get('/callback', async (req, res) => {
     // Handle authorization errors (user cancelled, etc.)
     if (error) {
       console.error('OAuth authorization error:', error);
-      return res.status(400).send('Authorization was cancelled or failed. Try again?');
+      return res.redirect('/?error=' + encodeURIComponent('Authorization was cancelled or failed.'));
     }
     
     // Validate state parameter (CSRF protection)
     if (state !== req.session.oauthState) {
       console.error('State mismatch - potential CSRF attack');
-      return res.status(400).send('Invalid state parameter. Please restart authorization.');
+      return res.redirect('/?error=' + encodeURIComponent('Invalid state parameter. Please restart authorization.'));
     }
     
     // Exchange authorization code for access/refresh tokens
@@ -105,7 +105,7 @@ router.get('/callback', async (req, res) => {
     const otherTokens = req.session.tokens[otherUser];
     
     if (otherTokens && otherTokens.spotifyId === spotifyId) {
-      return res.status(400).send('This account already authorized. User B needs a different account.');
+      return res.redirect('/?error=' + encodeURIComponent('This account already authorized. User B needs a different account.'));
     }
     
     // Store tokens in session
@@ -125,7 +125,7 @@ router.get('/callback', async (req, res) => {
     res.redirect('/?status=success');
   } catch (error) {
     console.error('Error handling OAuth callback:', error);
-    res.status(500).send('Something went wrong completing authorization. Try again?');
+    res.redirect('/?error=' + encodeURIComponent('Something went wrong completing authorization.'));
   }
 });
 
