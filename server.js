@@ -30,6 +30,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Mount OAuth routes
+const authRoutes = require('./routes/auth');
+app.use('/', authRoutes);
+
 // Health check route
 app.get('/', (req, res) => {
   res.send(`
