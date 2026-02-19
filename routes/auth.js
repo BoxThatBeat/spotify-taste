@@ -87,11 +87,36 @@ router.get('/callback', async (req, res) => {
       return res.redirect('/?error=' + encodeURIComponent('Authorization was cancelled or failed.'));
     }
     
+    // Check if code exists
+    if (!code) {
+      console.error('No authorization code received');
+      return res.redirect('/?error=' + encodeURIComponent('No authorization code received.'));
+    }
+    
     // Validate state parameter (CSRF protection)
+    if (!req.session.oauthState) {
+      console.error('No OAuth state in session - session may have expired');
+      return res.redirect('/?error=' + encodeURIComponent('Session expired. Please start authorization again.'));
+    }
+    
     if (state !== req.session.oauthState) {
       console.error('State mismatch - potential CSRF attack');
+      console.error('Expected:', req.session.oauthState);
+      console.error('Received:', state);
       return res.redirect('/?error=' + encodeURIComponent('Invalid state parameter. Please restart authorization.'));
     }
+    
+    // Clear OAuth state immediately to prevent reuse
+    const currentUser = req.session.currentUser;
+    delete req.session.oauthState;
+    delete req.session.currentUser;
+    
+    if (!currentUser) {
+      console.error('No currentUser in session');
+      return res.redirect('/?error=' + encodeURIComponent('Session error. Please restart authorization.'));
+    }
+    
+    console.log(`Processing authorization for ${currentUser} with code: ${code.substring(0, 10)}...`);
     
     // Exchange authorization code for access/refresh tokens
     const data = await spotifyApi.authorizationCodeGrant(code);
@@ -104,11 +129,11 @@ router.get('/callback', async (req, res) => {
     const displayName = profile.body.display_name;
     
     // Duplicate account detection
-    const currentUser = req.session.currentUser;
     const otherUser = currentUser === 'userA' ? 'userB' : 'userA';
     const otherTokens = req.session.tokens[otherUser];
     
     if (otherTokens && otherTokens.spotifyId === spotifyId) {
+      console.log(`Duplicate account detected: ${spotifyId} already authorized as ${otherUser}`);
       return res.redirect('/?error=' + encodeURIComponent('This account already authorized. User B needs a different account.'));
     }
     
@@ -121,16 +146,28 @@ router.get('/callback', async (req, res) => {
       displayName: displayName
     };
     
-    // Clear OAuth state from session
-    delete req.session.oauthState;
-    delete req.session.currentUser;
+    console.log(`Successfully authorized ${currentUser}: ${displayName} (${spotifyId})`);
     
     // Redirect to success page
     res.redirect('/?status=success');
   } catch (error) {
     console.error('Error handling OAuth callback:', error);
     console.error('Error details:', error.message);
-    console.error('Error stack:', error.stack);
+    
+    // Check if it's a Spotify API error
+    if (error.statusCode) {
+      console.error('Spotify API error - Status:', error.statusCode);
+      console.error('Response body:', error.body);
+      
+      if (error.statusCode === 403) {
+        return res.redirect('/?error=' + encodeURIComponent('Authorization code expired or invalid. Please try again.'));
+      }
+      
+      if (error.statusCode === 400) {
+        return res.redirect('/?error=' + encodeURIComponent('Invalid authorization request. Please restart authorization.'));
+      }
+    }
+    
     res.redirect('/?error=' + encodeURIComponent('Something went wrong completing authorization. Check server logs.'));
   }
 });
