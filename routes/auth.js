@@ -14,6 +14,9 @@ const spotifyApi = new SpotifyWebApi({
 // Required scopes for accessing user's top artists and tracks
 const SCOPES = ['user-top-read'];
 
+// Track processing authorization codes to prevent duplicate requests
+const processingCodes = new Set();
+
 /**
  * GET /login/userA
  * Initiates OAuth flow for User A (the first user)
@@ -93,6 +96,14 @@ router.get('/callback', async (req, res) => {
       return res.redirect('/?error=' + encodeURIComponent('No authorization code received.'));
     }
     
+    // Prevent duplicate processing of the same authorization code
+    if (processingCodes.has(code)) {
+      console.log('Authorization code already being processed, ignoring duplicate request');
+      return res.redirect('/?status=processing');
+    }
+    
+    processingCodes.add(code);
+    
     // Validate state parameter (CSRF protection)
     if (!req.session.oauthState) {
       console.error('No OAuth state in session - session may have expired');
@@ -148,11 +159,19 @@ router.get('/callback', async (req, res) => {
     
     console.log(`Successfully authorized ${currentUser}: ${displayName} (${spotifyId})`);
     
+    // Remove code from processing set
+    processingCodes.delete(code);
+    
     // Redirect to success page
     res.redirect('/?status=success');
   } catch (error) {
     console.error('Error handling OAuth callback:', error);
     console.error('Error details:', error.message);
+    
+    // Remove code from processing set on error
+    if (req.query.code) {
+      processingCodes.delete(req.query.code);
+    }
     
     // Check if it's a Spotify API error
     if (error.statusCode) {
