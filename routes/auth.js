@@ -59,10 +59,13 @@ router.get('/login/userB', (req, res) => {
     
     // Create Spotify authorization URL with show_dialog=true
     // This forces Spotify to show account picker instead of auto-login
-    const authorizeURL = spotifyApi.createAuthorizeURL(SCOPES, state, true);
+    const authorizeURL = spotifyApi.createAuthorizeURL(SCOPES, state);
+    
+    // Manually append show_dialog parameter to force account selection
+    const urlWithDialog = authorizeURL + '&show_dialog=true';
     
     // Redirect user to Spotify authorization page
-    res.redirect(authorizeURL);
+    res.redirect(urlWithDialog);
   } catch (error) {
     console.error('Error initiating User B login:', error);
     res.status(500).send('Something went wrong starting authorization. Try again?');
@@ -126,7 +129,9 @@ router.get('/callback', async (req, res) => {
     res.redirect('/?status=success');
   } catch (error) {
     console.error('Error handling OAuth callback:', error);
-    res.redirect('/?error=' + encodeURIComponent('Something went wrong completing authorization.'));
+    console.error('Error details:', error.message);
+    console.error('Error stack:', error.stack);
+    res.redirect('/?error=' + encodeURIComponent('Something went wrong completing authorization. Check server logs.'));
   }
 });
 
