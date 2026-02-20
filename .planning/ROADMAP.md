@@ -46,10 +46,11 @@ Plans:
   2. System fetches both users' top artists and top tracks in parallel for selected time range
   3. System automatically refreshes expired tokens (before 1-hour expiration) without user action
   4. System handles Spotify API rate limits gracefully with retry-after logic (no crashes or silent failures)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] (Plans created during /gsd-plan-phase 2)
+- [ ] 02-01-PLAN.md — Backend API with token refresh and rate limiting
+- [ ] 02-02-PLAN.md — Time range selector UI and fetch trigger
 
 ### Phase 3: Comparison Engine
 **Goal**: System identifies and quantifies shared music taste between two users
@@ -88,10 +89,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. OAuth Foundation | 4/4 | Complete ✓ | 2026-02-19 |
-| 2. Data Pipeline | 0/TBD | Not started | - |
+| 2. Data Pipeline | 0/2 | Not started | - |
 | 3. Comparison Engine | 0/TBD | Not started | - |
 | 4. Visual Results | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-18*
-*Last updated: 2026-02-19 (Phase 1 complete)*
+*Last updated: 2026-02-19 (Phase 2 planned)*
