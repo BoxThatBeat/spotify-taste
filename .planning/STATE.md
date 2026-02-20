@@ -5,33 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-02-18)
 
 **Core value:** Two people can instantly see their shared music taste through visual grids of album covers and artist images.
-**Current focus:** Phase 1 - OAuth Foundation
+**Current focus:** Phase 2 - Data Pipeline
 
 ## Current Position
 
-Phase: 1 of 4 (OAuth Foundation)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-02-19 — Completed 01-04-PLAN.md (checkpoint verification)
+Phase: 2 of 4 (Data Pipeline)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-20 — Completed 02-01-PLAN.md
 
-Progress: [█████░░░░░] 100% (Phase 1)
+Progress: [█████░░░░░] 50% (Phase 2: 1/2 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 1 min
-- Total execution time: 0.08 hours
+- Total execution time: 0.11 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. OAuth Foundation | 4 | 4 min | 1 min |
+| 2. Data Pipeline | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (1 min), 01-02 (1 min), 01-03 (2 min), 01-04 (0 min checkpoint)
-- Trend: Consistent velocity, Phase 1 complete
+- Last 5 plans: 01-02 (1 min), 01-03 (2 min), 01-04 (0 min checkpoint), 02-01 (2 min)
+- Trend: Consistent velocity, entering Phase 2
 
 *Updated after each plan completion*
 
@@ -70,6 +71,12 @@ Recent decisions affecting current work:
 - Processing lock prevents duplicate authorization code usage
 - OAuth requires HTTPS even for localhost redirect URIs
 
+**From 02-01:**
+- 5-minute buffer before token expiry for proactive refresh prevents mid-request failures
+- Exponential backoff (1s → 2s → 4s) for rate limit retries respects Spotify API limits
+- Parallel fetching via nested Promise.all (4 concurrent API calls) minimizes wait time
+- Full error details in development mode prioritizes debuggability over polish
+
 ### Pending Todos
 
 None yet.
@@ -86,10 +93,10 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-19T00:11:31Z
-Stopped at: Completed 01-04-PLAN.md (checkpoint verification)
+Last session: 2026-02-20T01:13:56Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
-Next: Ready for Phase 2 planning (/gsd-plan-phase 2)
+Next: Ready for 02-02-PLAN.md (time range selector UI)
 
 ---
-*Last updated: 2026-02-19 after completing 01-04-PLAN.md*
+*Last updated: 2026-02-20 after completing 02-01-PLAN.md*
