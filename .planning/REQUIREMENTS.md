@@ -9,13 +9,13 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User A can initiate Spotify OAuth authorization
-- [ ] **AUTH-02**: User B can initiate Spotify OAuth authorization after User A
-- [ ] **AUTH-03**: System securely stores OAuth tokens server-side (not in frontend)
-- [ ] **AUTH-04**: System requests user-top-read scope from Spotify
-- [ ] **AUTH-05**: OAuth flow uses Authorization Code flow with backend
-- [ ] **AUTH-06**: System validates OAuth state parameter (CSRF protection)
-- [ ] **AUTH-07**: System maintains separate token storage for both users
+- [x] **AUTH-01**: User A can initiate Spotify OAuth authorization ✓ Phase 1
+- [x] **AUTH-02**: User B can initiate Spotify OAuth authorization after User A ✓ Phase 1
+- [x] **AUTH-03**: System securely stores OAuth tokens server-side (not in frontend) ✓ Phase 1
+- [x] **AUTH-04**: System requests user-top-read scope from Spotify ✓ Phase 1
+- [x] **AUTH-05**: OAuth flow uses Authorization Code flow with backend ✓ Phase 1
+- [x] **AUTH-06**: System validates OAuth state parameter (CSRF protection) ✓ Phase 1
+- [x] **AUTH-07**: System maintains separate token storage for both users ✓ Phase 1
 
 ### Data Fetching
 
@@ -90,13 +90,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 1 | Pending |
-| AUTH-06 | Phase 1 | Pending |
-| AUTH-07 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete ✓ |
+| AUTH-02 | Phase 1 | Complete ✓ |
+| AUTH-03 | Phase 1 | Complete ✓ |
+| AUTH-04 | Phase 1 | Complete ✓ |
+| AUTH-05 | Phase 1 | Complete ✓ |
+| AUTH-06 | Phase 1 | Complete ✓ |
+| AUTH-07 | Phase 1 | Complete ✓ |
 | DATA-01 | Phase 2 | Pending |
 | DATA-02 | Phase 2 | Pending |
 | DATA-03 | Phase 2 | Pending |
@@ -127,4 +127,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-18*
-*Last updated: 2026-02-18 after roadmap creation (traceability mapped)*
+*Last updated: 2026-02-19 after Phase 1 completion (7 AUTH requirements complete)*
