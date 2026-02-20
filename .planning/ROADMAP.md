@@ -13,7 +13,7 @@ This roadmap delivers a visual music comparison tool through four focused phases
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: OAuth Foundation** - Two-user sequential Spotify authorization with secure token storage ✓ 2026-02-19
-- [ ] **Phase 2: Data Pipeline** - Spotify API integration with parallel fetching and token refresh
+- [x] **Phase 2: Data Pipeline** - Spotify API integration with parallel fetching and token refresh ✓ 2026-02-20
 - [ ] **Phase 3: Comparison Engine** - Server-side exact match algorithm with percentage calculation
 - [ ] **Phase 4: Visual Results** - Responsive grid display with images and empty state handling
 
@@ -50,7 +50,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md — Backend API with token refresh and rate limiting ✓ 2026-02-20
-- [ ] 02-02-PLAN.md — Time range selector UI and fetch trigger
+- [x] 02-02-PLAN.md — Time range selector UI and fetch trigger ✓ 2026-02-20
 
 ### Phase 3: Comparison Engine
 **Goal**: System identifies and quantifies shared music taste between two users
@@ -89,10 +89,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. OAuth Foundation | 4/4 | Complete ✓ | 2026-02-19 |
-| 2. Data Pipeline | 1/2 | In progress | - |
+| 2. Data Pipeline | 2/2 | Complete ✓ | 2026-02-20 |
 | 3. Comparison Engine | 0/TBD | Not started | - |
 | 4. Visual Results | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-18*
-*Last updated: 2026-02-20 (02-01 complete)*
+*Last updated: 2026-02-20 (Phase 2 complete)*
