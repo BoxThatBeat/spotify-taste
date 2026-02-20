@@ -60,6 +60,10 @@ app.post('/api/clear-session', (req, res) => {
 const authRoutes = require('./routes/auth');
 app.use('/', authRoutes);
 
+// Mount Spotify data routes
+const spotifyDataRoutes = require('./routes/spotify-data');
+app.use('/', spotifyDataRoutes);
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
