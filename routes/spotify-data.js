@@ -24,10 +24,17 @@ function isTokenExpired(expiresAt) {
 async function refreshUserToken(userKey, tokens, session) {
   console.log(`Refreshing token for ${userKey}`);
   
-  spotifyApi.setRefreshToken(tokens.refreshToken);
+  // Create a fresh instance for this user to avoid token contamination
+  const userSpotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI
+  });
+  
+  userSpotifyApi.setRefreshToken(tokens.refreshToken);
   
   try {
-    const data = await spotifyApi.refreshAccessToken();
+    const data = await userSpotifyApi.refreshAccessToken();
     const { access_token, expires_in } = data.body;
     
     // Update session with new token
@@ -145,18 +152,26 @@ router.get('/api/fetch-data', async (req, res) => {
     const [userAData, userBData] = await Promise.all([
       // User A data
       (async () => {
-        spotifyApi.setAccessToken(userAAccessToken);
+        // Create a fresh instance for User A to avoid token contamination
+        const userASpotifyApi = new SpotifyWebApi({
+          clientId: process.env.SPOTIFY_CLIENT_ID,
+          clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+          redirectUri: process.env.SPOTIFY_REDIRECT_URI
+        });
+        userASpotifyApi.setAccessToken(userAAccessToken);
         
         const [topArtists, topTracks] = await Promise.all([
-          fetchWithRetry(() => spotifyApi.getMyTopArtists({ 
+          fetchWithRetry(() => userASpotifyApi.getMyTopArtists({ 
             time_range: timeRange, 
             limit: 50 
           })),
-          fetchWithRetry(() => spotifyApi.getMyTopTracks({ 
+          fetchWithRetry(() => userASpotifyApi.getMyTopTracks({ 
             time_range: timeRange, 
             limit: 50 
           }))
         ]);
+        
+        console.log(`User A: Fetched ${topArtists.body.items.length} artists, ${topTracks.body.items.length} tracks`);
         
         return {
           displayName: userATokens.displayName,
@@ -181,18 +196,26 @@ router.get('/api/fetch-data', async (req, res) => {
       
       // User B data
       (async () => {
-        spotifyApi.setAccessToken(userBAccessToken);
+        // Create a fresh instance for User B to avoid token contamination
+        const userBSpotifyApi = new SpotifyWebApi({
+          clientId: process.env.SPOTIFY_CLIENT_ID,
+          clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+          redirectUri: process.env.SPOTIFY_REDIRECT_URI
+        });
+        userBSpotifyApi.setAccessToken(userBAccessToken);
         
         const [topArtists, topTracks] = await Promise.all([
-          fetchWithRetry(() => spotifyApi.getMyTopArtists({ 
+          fetchWithRetry(() => userBSpotifyApi.getMyTopArtists({ 
             time_range: timeRange, 
             limit: 50 
           })),
-          fetchWithRetry(() => spotifyApi.getMyTopTracks({ 
+          fetchWithRetry(() => userBSpotifyApi.getMyTopTracks({ 
             time_range: timeRange, 
             limit: 50 
           }))
         ]);
+        
+        console.log(`User B: Fetched ${topArtists.body.items.length} artists, ${topTracks.body.items.length} tracks`);
         
         return {
           displayName: userBTokens.displayName,
@@ -216,7 +239,17 @@ router.get('/api/fetch-data', async (req, res) => {
       })()
     ]);
     
-    console.log(`Successfully fetched data for both users (${userAData.topArtists.length} artists, ${userAData.topTracks.length} tracks each)`);
+    console.log(`Successfully fetched data for both users`);
+    console.log(`User A: ${userAData.topArtists.length} artists, ${userAData.topTracks.length} tracks`);
+    console.log(`User B: ${userBData.topArtists.length} artists, ${userBData.topTracks.length} tracks`);
+    
+    // Check if data is empty and provide helpful message
+    if (userAData.topArtists.length === 0 && userAData.topTracks.length === 0) {
+      console.log(`Warning: User A has no listening history for ${timeRange}`);
+    }
+    if (userBData.topArtists.length === 0 && userBData.topTracks.length === 0) {
+      console.log(`Warning: User B has no listening history for ${timeRange}`);
+    }
     
     // Return combined response
     res.json({

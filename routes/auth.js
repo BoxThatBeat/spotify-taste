@@ -11,8 +11,8 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: process.env.SPOTIFY_REDIRECT_URI
 });
 
-// Required scopes for accessing user's top artists and tracks
-const SCOPES = ['user-top-read'];
+// Required scopes for accessing user's top artists and tracks, plus user profile
+const SCOPES = ['user-top-read', 'user-read-private', 'user-read-email'];
 
 // Track processing authorization codes to prevent duplicate requests
 const processingCodes = new Set();
@@ -128,14 +128,29 @@ router.get('/callback', async (req, res) => {
     }
     
     console.log(`Processing authorization for ${currentUser} with code: ${code.substring(0, 10)}...`);
+    console.log('Auth code full length:', code.length);
+    console.log('Using CLIENT_ID:', process.env.SPOTIFY_CLIENT_ID);
+    console.log('Using REDIRECT_URI:', process.env.SPOTIFY_REDIRECT_URI);
+    
+    // Create a fresh SpotifyWebApi instance for this user
+    // This prevents token contamination between User A and User B
+    const userSpotifyApi = new SpotifyWebApi({
+      clientId: process.env.SPOTIFY_CLIENT_ID,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      redirectUri: process.env.SPOTIFY_REDIRECT_URI
+    });
+    
+    console.log('Attempting to exchange auth code for tokens...');
     
     // Exchange authorization code for access/refresh tokens
-    const data = await spotifyApi.authorizationCodeGrant(code);
+    const data = await userSpotifyApi.authorizationCodeGrant(code);
+    
+    console.log('✓ Token exchange successful!');
     const { access_token, refresh_token, expires_in } = data.body;
     
     // Get user profile to retrieve Spotify ID (for duplicate detection)
-    spotifyApi.setAccessToken(access_token);
-    const profile = await spotifyApi.getMe();
+    userSpotifyApi.setAccessToken(access_token);
+    const profile = await userSpotifyApi.getMe();
     const spotifyId = profile.body.id;
     const displayName = profile.body.display_name;
     

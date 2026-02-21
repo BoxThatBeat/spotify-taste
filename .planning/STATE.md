@@ -2,19 +2,18 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-18)
+See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** Two people can instantly see their shared music taste through visual grids of album covers and artist images.
-**Current focus:** Phase 4 - Visual Results (COMPLETE)
+**Current focus:** v1.0 MVP shipped — planning next milestone
 
 ## Current Position
 
-Phase: 4 of 4 (Visual Results)
-Plan: 1 of 1 in current phase
-Status: Phase complete - v1 MVP feature-complete
-Last activity: 2026-02-21 — Completed 04-01-PLAN.md
+Milestone: v1.0 MVP complete ✅
+Status: Ready for next milestone planning
+Last activity: 2026-02-21 — v1.0 milestone archived
 
-Progress: [█████████░] 90% (9/10 plans complete)
+Progress: v1.0 complete (4 phases, 9 plans, 30 requirements shipped)
 
 ## Performance Metrics
 
@@ -42,104 +41,28 @@ Progress: [█████████░] 90% (9/10 plans complete)
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+All v1.0 decisions are archived in PROJECT.md Key Decisions table.
 
-- Phase structure: 4-phase approach aligns with research recommendations (OAuth → API → Comparison → UI)
-- Exact matches only for v1 (no similarity algorithms) keeps scope simple
-- Same-device OAuth flow for in-person use case
-- Visual-first presentation with grids of images
-
-**From 01-01:**
-- CommonJS module system for spotify-web-api-node compatibility
-- Express 5.x for modern async/await OAuth flow support
-- Node 20+ built-in watch mode eliminates nodemon dependency
-
-**From 01-02:**
-- 15-minute session timeout balances security with in-person use case
-- State parameter in session provides CSRF protection without database
-- Immediate profile fetch enables duplicate detection before storing tokens
-- Dev fallback secret allows testing without full .env setup
-
-**From 01-03:**
-- JavaScript fetch API loads session status on page load for dynamic UI rendering
-- Query parameters (error, status) communicate redirect results from OAuth callback
-- Error messages display with retry button for user-friendly recovery
-- Spotify green (#1DB954) for primary actions matches brand recognition
-
-**From 01-04:**
-- ngrok tunnel provides HTTPS for Spotify OAuth during local development
-- show_dialog=true parameter forces Spotify account picker for User B
-- Processing lock prevents duplicate authorization code usage
-- OAuth requires HTTPS even for localhost redirect URIs
-
-**From 02-01:**
-- 5-minute buffer before token expiry for proactive refresh prevents mid-request failures
-- Exponential backoff (1s → 2s → 4s) for rate limit retries respects Spotify API limits
-- Parallel fetching via nested Promise.all (4 concurrent API calls) minimizes wait time
-- Full error details in development mode prioritizes debuggability over polish
-
-**From 02-02:**
-- Time range selector embedded in comparison section (only visible after both users authorize)
-- Async/await fetch pattern with try/catch for clean error handling
-- Technical error details displayed in development mode for debugging
-- Retry button re-triggers comparison without page reload
-
-**From 03-01:**
-- JavaScript native Set with filter + has pattern for Node 20 compatibility (Set.intersection not available yet)
-- Jaccard similarity index for mathematically sound match percentages
-- Re-fetch data in compare endpoint for simplicity (no caching complexity in v1)
-- Server-side only comparison preserves privacy (full libraries never exposed)
-
-**From 03-02:**
-- Alert-based results display for Phase 3 (Phase 4 will add visual grids)
-- POST /api/compare with timeRange in request body
-- Parse breakdown and counts from API response for detailed display
-
-**From 04-01:**
-- CSS Grid with auto-fit for responsive column layout (desktop 2-3 columns, mobile 1-2 columns)
-- Defensive image loading with fallback to placeholder for missing Spotify images
-- Match percentage hero display at top with breakdown details
-- Grid rendering pattern: clear container, iterate data, create DOM elements, append
+**v1.0 shipped decisions:**
+- Full OAuth flow with CSRF protection and token management
+- Exact match comparison using Jaccard similarity index
+- Server-side privacy-preserving architecture
+- Responsive CSS Grid layout for visual results
 
 ### Pending Todos
 
-None yet.
+None — awaiting next milestone definition.
 
 ### Blockers/Concerns
 
-**From Phase 1 (resolved):**
-- ✅ Environment configuration complete
-- ✅ Spotify OAuth credentials configured
-- ✅ HTTPS requirement handled via ngrok tunnel
-
-**For Phase 2 (resolved):**
-- ✅ OAuth foundation complete and verified
-- ✅ Backend API with token refresh and rate limiting
-- ✅ Frontend UI with time range selector and fetch trigger
-
-**For Phase 3 (resolved):**
-- ✅ Comparison engine backend complete (03-01)
-- ✅ Frontend integration complete (03-02)
-- ✅ End-to-end flow verified with real Spotify accounts
-
-**For Phase 4 (resolved):**
-- ✅ Visual grid display with responsive layout (04-01)
-- ✅ Match percentage hero with breakdown
-- ✅ Empty state handling
-- ✅ Mobile-optimized layout verified
-
-**v1 MVP Status:**
-- ✅ All 4 phases complete
-- ✅ Core user journey: OAuth → Comparison → Visual Results
-- Ready for end-to-end testing and production deployment considerations
+None — v1.0 MVP complete and ready for deployment/user testing.
 
 ## Session Continuity
 
-Last session: 2026-02-21T22:17:35Z
-Stopped at: Completed 04-01-PLAN.md (Visual Results) - Phase 4 complete, v1 MVP feature-complete
+Last session: 2026-02-21
+Stopped at: v1.0 milestone archived
 Resume file: None
-Next: End-to-end testing or production deployment preparation
+Next: `/gsd-new-milestone` to start next milestone (questioning → research → requirements → roadmap)
 
 ---
-*Last updated: 2026-02-21 after completing 04-01*
+*Last updated: 2026-02-21 after v1.0 milestone completion*
