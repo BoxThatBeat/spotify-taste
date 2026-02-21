@@ -61,10 +61,11 @@ Plans:
   2. System calculates overall match percentage based on total shared items vs total unique items
   3. System provides breakdown showing artists match percentage and tracks match percentage separately
   4. Comparison happens server-side (full user data never sent to frontend, only matched results)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] (Plans created during /gsd-plan-phase 3)
+- [ ] 03-01-PLAN.md — Backend comparison engine (Set-based matching + Jaccard index)
+- [ ] 03-02-PLAN.md — Frontend integration (wire comparison button to API)
 
 ### Phase 4: Visual Results
 **Goal**: Users see their shared music taste through engaging visual grids of images
@@ -90,9 +91,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. OAuth Foundation | 4/4 | Complete ✓ | 2026-02-19 |
 | 2. Data Pipeline | 2/2 | Complete ✓ | 2026-02-20 |
-| 3. Comparison Engine | 0/TBD | Not started | - |
+| 3. Comparison Engine | 0/2 | Not started | - |
 | 4. Visual Results | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-18*
-*Last updated: 2026-02-20 (Phase 2 complete)*
+*Last updated: 2026-02-20 (Phase 3 planned)*
