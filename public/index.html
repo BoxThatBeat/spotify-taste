@@ -57,6 +57,41 @@
         </button>
       </div>
     </div>
+
+    <!-- Results Section (shown after comparison completes) -->
+    <div id="results-section" style="display: none;">
+      <!-- Match Percentage Hero -->
+      <div id="match-hero">
+        <div id="overall-match"></div>
+        <div id="breakdown"></div>
+      </div>
+
+      <!-- Two-column grid container -->
+      <div class="grids-container">
+        <!-- Artists Grid -->
+        <div class="grid-section">
+          <h2>Shared Artists</h2>
+          <div id="artists-grid" class="results-grid"></div>
+          <div id="artists-empty" class="empty-state" style="display: none;">
+            No shared artists found for this time range
+          </div>
+        </div>
+
+        <!-- Tracks Grid -->
+        <div class="grid-section">
+          <h2>Shared Tracks</h2>
+          <div id="tracks-grid" class="results-grid"></div>
+          <div id="tracks-empty" class="empty-state" style="display: none;">
+            No shared tracks found for this time range
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to comparison button -->
+      <button id="backBtn" class="primary-button" style="margin-top: 30px;">
+        Compare Again
+      </button>
+    </div>
   </div>
 
   <script>
