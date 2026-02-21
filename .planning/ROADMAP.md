@@ -64,7 +64,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Backend comparison engine (Set-based matching + Jaccard index)
+- [x] 03-01-PLAN.md — Backend comparison engine (Set-based matching + Jaccard index) ✓ 2026-02-21
 - [ ] 03-02-PLAN.md — Frontend integration (wire comparison button to API)
 
 ### Phase 4: Visual Results
@@ -91,9 +91,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. OAuth Foundation | 4/4 | Complete ✓ | 2026-02-19 |
 | 2. Data Pipeline | 2/2 | Complete ✓ | 2026-02-20 |
-| 3. Comparison Engine | 0/2 | Not started | - |
+| 3. Comparison Engine | 1/2 | In progress | - |
 | 4. Visual Results | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-18*
-*Last updated: 2026-02-20 (Phase 3 planned)*
+*Last updated: 2026-02-21 (03-01 complete)*
