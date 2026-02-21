@@ -10,7 +10,11 @@ document.getElementById('compareBtn').addEventListener('click', async () => {
   document.getElementById('compareBtn').disabled = true;
   
   try {
-    const response = await fetch(`/api/fetch-data?timeRange=${timeRange}`);
+    const response = await fetch('/api/compare', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ timeRange: timeRange })
+    });
     
     if (!response.ok) {
       // Show technical error details
@@ -19,15 +23,25 @@ document.getElementById('compareBtn').addEventListener('click', async () => {
     }
     
     const data = await response.json();
+    const { sharedArtists, sharedTracks, matchPercentage, breakdown, counts } = data;
     
     // Hide loading
     document.getElementById('loading').style.display = 'none';
     document.getElementById('compareBtn').disabled = false;
     
-    // TODO: Phase 3 will handle comparison, Phase 4 will display results
-    // For now, log data and show success message
-    console.log('Fetched data:', data);
-    alert(`Success! Fetched ${data.userA.topArtists.length} artists and ${data.userA.topTracks.length} tracks for both users.`);
+    // Build results message
+    const resultsMessage = `
+🎵 Match Score: ${matchPercentage}%
+
+Artists Match: ${breakdown.artistsMatch}% (${counts.sharedArtists} shared out of ${counts.totalUniqueArtists} unique)
+Tracks Match: ${breakdown.tracksMatch}% (${counts.sharedTracks} shared out of ${counts.totalUniqueTracks} unique)
+
+Shared Artists: ${sharedArtists.map(a => a.name).join(', ')}
+Shared Tracks: ${sharedTracks.map(t => `${t.name} - ${t.artists[0].name}`).join(', ')}
+`;
+    
+    // Display results (Phase 4 will replace alert with visual grid)
+    alert(resultsMessage);
     
   } catch (error) {
     // Hide loading
