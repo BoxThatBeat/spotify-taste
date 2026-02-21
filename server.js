@@ -64,6 +64,10 @@ app.use('/', authRoutes);
 const spotifyDataRoutes = require('./routes/spotify-data');
 app.use('/', spotifyDataRoutes);
 
+// Mount comparison routes
+const comparisonRoutes = require('./routes/comparison');
+app.use('/api', comparisonRoutes);
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
